@@ -65,6 +65,8 @@ else
         --track-renames \
         --delete-excluded \
         --fast-list \
+        --checksum \
+        --transfers $MAX_THREADS \
         -vP $RCLONE_OPTS \
        --http-url $DEFAULT_HTTP_MIRROR \
        :http:/ $MIRROR_DIR
