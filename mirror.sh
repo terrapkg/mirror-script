@@ -9,4 +9,4 @@ DEFAULT_MIRROR_URL="rsync://repos.fyralabs.com/repo/"
 
 echo "Mirroring $MIRROR_URL to $MIRROR_DIR"
 
-rsync-ssl -avPzr --delete $MIRROR_URL $MIRROR_DIR
+rsync-ssl -avPzr $RSYNC_EXTRA_ARGS --delete $MIRROR_URL $MIRROR_DIR
