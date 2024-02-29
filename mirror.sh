@@ -1,10 +1,19 @@
 #!/bin/bash
 DEFAULT_MIRROR_URL="rsync://repos.fyralabs.com/repo/"
+DEFAULT_HTTP_MIRROR="https://repos.fyralabs.com"
+: ${USE_RSYNC=0}
+
+
 # This script is for mirroring repos.fyralabs.com to a local directory.
 
 # Default mirror directory: directory of script / repo
 : ${MIRROR_DIR:=$(dirname $0)/repo}
-: ${MIRROR_URL:=$DEFAULT_MIRROR_URL}
+if [ "$USE_RSYNC" -eq 0 ]; then
+    : ${MIRROR_URL=$DEFAULT_HTTP_MIRROR}
+else
+    : ${MIRROR_URL:=$DEFAULT_MIRROR_URL}
+fi
+
 
 # rsync binary to use
 : ${RSYNC:=rsync-ssl}
@@ -24,11 +33,11 @@ list_all_files() {
 
 parallel_rsync() {
     echo "Starting parallel rsync with $MAX_THREADS threads"
-    
+
     list_all_files | parallel --no-notice -j $MAX_THREADS \
         $RSYNC \
         -avPzdR --mkpath \
-        $RSYNC_EXTRA_ARGS \
+        $RSYNC_OPTS \
         --delete \
         $MIRROR_URL{} \
         $MIRROR_DIR/{}
@@ -39,8 +48,24 @@ echo "Mirroring $MIRROR_URL to $MIRROR_DIR"
 
 # rsync-ssl -avPzr $RSYNC_EXTRA_ARGS --delete $MIRROR_URL $MIRROR_DIR
 
-if [ $PARALLEL -eq 1 ]; then
-    parallel_rsync
+
+if [ $USE_RSYNC -eq 1 ]; then
+    echo "Using rsync"
+    if [ $PARALLEL -eq 1 ]; then
+        parallel_rsync
+    else
+        $RSYNC -avPzr $RSYNC_OPTS --delete $MIRROR_URL $MIRROR_DIR
+    fi
+
 else
-    $RSYNC -avPzr $RSYNC_EXTRA_ARGS --delete $MIRROR_URL $MIRROR_DIR
+    echo "Using Rclone"
+
+    rclone sync \
+        --delete-after \
+        --track-renames \
+        --delete-excluded \
+        --fast-list \
+        -vP $RCLONE_OPTS \
+       --http-url $DEFAULT_HTTP_MIRROR \
+       :http:/ $MIRROR_DIR
 fi
