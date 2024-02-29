@@ -3,7 +3,6 @@ DEFAULT_MIRROR_URL="rsync://repos.fyralabs.com/repo/"
 DEFAULT_HTTP_MIRROR="https://repos.fyralabs.com"
 : ${USE_RSYNC=0}
 
-
 # This script is for mirroring repos.fyralabs.com to a local directory.
 
 # Default mirror directory: directory of script / repo
@@ -13,7 +12,6 @@ if [ "$USE_RSYNC" -eq 0 ]; then
 else
     : ${MIRROR_URL:=$DEFAULT_MIRROR_URL}
 fi
-
 
 # rsync binary to use
 : ${RSYNC:=rsync-ssl}
@@ -48,7 +46,6 @@ echo "Mirroring $MIRROR_URL to $MIRROR_DIR"
 
 # rsync-ssl -avPzr $RSYNC_EXTRA_ARGS --delete $MIRROR_URL $MIRROR_DIR
 
-
 if [ $USE_RSYNC -eq 1 ]; then
     echo "Using rsync"
     if [ $PARALLEL -eq 1 ]; then
@@ -67,7 +64,9 @@ else
         --fast-list \
         --checksum \
         --transfers $MAX_THREADS \
-        -vP $RCLONE_OPTS \
-       --http-url $DEFAULT_HTTP_MIRROR \
-       :http:/ $MIRROR_DIR
+        --stats 5s \
+        --stats-one-line \
+        -v $RCLONE_OPTS \
+        --http-url $DEFAULT_HTTP_MIRROR \
+        :http:/ $MIRROR_DIR
 fi
