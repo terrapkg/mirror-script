@@ -21,7 +21,7 @@ fi
 # use parallel rsync?
 : ${PARALLEL:=0}
 
-MAX_THREADS=$(nproc)
+: ${MAX_THREADS:=$(nproc)}
 
 list_all_files() {
     # echo "Fetching file list"
