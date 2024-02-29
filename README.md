@@ -24,7 +24,7 @@ In case you'd like to run this script inside a container, you can use the image 
 You can use either `podman` or `docker` to run the container. The following example uses `podman`:
 
 ```bash
-podman run --rm -it -v /path/to/mirror:/data ghcr.io/terrapkg/mirror-scripts:main
+podman run --rm -it -v /path/to/mirror:/data ghcr.io/terrapkg/mirror-script:main
 ```
 
 ### Configuration
