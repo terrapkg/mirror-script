@@ -10,12 +10,12 @@ DEFAULT_MIRROR_URL="rsync://repos.fyralabs.com/repo/"
 : ${RSYNC:=rsync-ssl}
 
 # use parallel rsync?
-: ${PARALLEL:=1}
+: ${PARALLEL:=0}
 
 MAX_THREADS=$(nproc)
 
 list_all_files() {
-    echo "Fetching file list"
+    # echo "Fetching file list"
     # clean up all the folders too, I guess
     $RSYNC -rt $MIRROR_URL | awk '{print $5}' | grep -v '/$' | sort | uniq
 }
@@ -24,7 +24,15 @@ list_all_files() {
 
 parallel_rsync() {
     echo "Starting parallel rsync with $MAX_THREADS threads"
-    list_all_files | parallel -j $MAX_THREADS $RSYNC -avPz --mkpath $RSYNC_EXTRA_ARGS --delete $MIRROR_URL{} $MIRROR_DIR/{}
+    
+    list_all_files | parallel --no-notice -j $MAX_THREADS \
+        $RSYNC \
+        -avPzdR --mkpath \
+        $RSYNC_EXTRA_ARGS \
+        --delete \
+        $MIRROR_URL{} \
+        $MIRROR_DIR/{}
+
 }
 
 echo "Mirroring $MIRROR_URL to $MIRROR_DIR"
