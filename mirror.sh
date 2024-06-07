@@ -62,7 +62,6 @@ else
         --track-renames \
         --delete-excluded \
         --fast-list \
-        --checksum \
         --transfers $MAX_THREADS \
         --stats 5s \
         --stats-one-line \
