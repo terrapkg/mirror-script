@@ -8,7 +8,7 @@ LABEL description="A simple container to mirror the Fyra Labs repositories."
 
 RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
 
-RUN microdnf install -y rsync openssh-clients rclone && microdnf clean all -y
+RUN microdnf install -y rsync openssh-clients rclone parallel && microdnf clean all -y
 
 ENV MIRROR_DIR /data
 
