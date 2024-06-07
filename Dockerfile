@@ -1,7 +1,7 @@
 # A simple Dockerfile in case one wants to run this as a container :P
 FROM registry.access.redhat.com/ubi9/ubi-minimal
 
-LABEL maintainer "Cappy Ishihara <cappy@fyralabs.com>"
+LABEL maintainer="Cappy Ishihara <cappy@fyralabs.com>"
 LABEL description="A simple container to mirror the Fyra Labs repositories."
 
 # enable EPEL
