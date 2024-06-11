@@ -8,7 +8,7 @@ This repository contains scripts to mirror Terra RPM repositories to a local dir
 - A good internet connection
 - Some disk space (100GB or more)
 - Some time
-- (Optional) A cron job to run this script regularly (preferrably hourly)
+- (Optional) A cron job to run this script regularly (preferrably every 5 minutes)
 
 ## Usage
 
@@ -33,6 +33,6 @@ The script can be configured using environment variables:
 
 - `MIRROR_DIR`: The directory to mirror the repositories to. Default: `$CWD/repo`, or `/data` if running inside a container.
 - `RSYNC`: The rsync binary to use. Default: `rsync-ssl`
-- `PARALLEL`: Toggle parallel downloads. Default: `0` (off) due to the incomplete multi-threaded rsync script.
+- `PARALLEL`: Toggle parallel downloads. (Currently only applicable for rsync.) Default: `0` (off) due to the jankiness of this code path. This might be useful to enable for an initial sync, disabling it after. Incremental syncs using this method may be slower than normal. Again, please don't use it outside of initally setting up your mirror.
 - `MAX_THREADS`: The maximum number of threads to use. Default: output of `nproc` (`$(nproc)`).
-- `USE_RSYNC`: Use rsync instead of Rclone. Default: `0` (off). The script mirrors from the HTTP server directly using Rclone by default.
+- `USE_RCLONE`: Use Rclone instead of rsync, mirroring from the HTTP server. Default: `0` (off). The script mirrors from the Fyra Labs rsync server by default.
