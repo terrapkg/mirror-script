@@ -3,6 +3,9 @@ DEFAULT_MIRROR_URL="rsync://repos.fyralabs.com/repo/"
 DEFAULT_HTTP_MIRROR="https://repos.fyralabs.com"
 : ${USE_RCLONE=0}
 
+: ${RSYNC_OPTS=()}
+: ${RCLONE_OPTS=()}
+
 # This script is for mirroring repos.fyralabs.com to a local directory.
 
 # Default mirror directory: directory of script / repo
@@ -21,6 +24,12 @@ fi
 
 : ${MAX_THREADS:=$(nproc)}
 
+: ${SYNC_SOURCES:=1}
+if [ "$SYNC_SOURCES" -eq 0 ]; then
+    RSYNC_OPTS+=("--exclude='*-source'")
+    RCLONE_OPTS+=("--exclude='*-source'")
+fi
+
 list_all_files() {
     # echo "Fetching file list"
     # clean up all the folders too, I guess; ^d excludes directories
@@ -35,13 +44,13 @@ parallel_rsync() {
     list_all_files | xargs -P $MAX_THREADS -I '{}' \
         $RSYNC \
         -avPz --mkpath \
-        $RSYNC_OPTS \
+        ${RSYNC_OPTS[*]} \
         --delete \
         $MIRROR_URL{} \
         $MIRROR_DIR/{}
 
     # We run rsync again just to get rid of any files that are deleted
-    $RSYNC -avPzr $RSYNC_OPTS --delete $MIRROR_URL $MIRROR_DIR
+    $RSYNC -avPzr ${RSYNC_OPTS[*]} --delete $MIRROR_URL $MIRROR_DIR
 }
 
 echo "Mirroring $MIRROR_URL to $MIRROR_DIR"
@@ -53,7 +62,7 @@ if [ "$USE_RCLONE" -eq 0 ]; then
     if [ $PARALLEL -eq 1 ]; then
         parallel_rsync
     else
-        $RSYNC -avPzr $RSYNC_OPTS --delete $MIRROR_URL $MIRROR_DIR
+        $RSYNC -avPzr ${RSYNC_OPTS[*]} --delete $MIRROR_URL $MIRROR_DIR
     fi
 
 else
@@ -67,7 +76,7 @@ else
         --transfers $MAX_THREADS \
         --stats 5s \
         --stats-one-line \
-        -v $RCLONE_OPTS \
+        -v ${RCLONE_OPTS[*]} \
         --http-url $DEFAULT_HTTP_MIRROR \
         :http:/ $MIRROR_DIR
 fi
