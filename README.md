@@ -36,3 +36,4 @@ The script can be configured using environment variables:
 - `PARALLEL`: Toggle parallel downloads. (Currently only applicable for rsync.) Default: `0` (off) due to the jankiness of this code path. This might be useful to enable for an initial sync, disabling it after. Incremental syncs using this method may be slower than normal. Again, please don't use it outside of initally setting up your mirror.
 - `MAX_THREADS`: The maximum number of threads to use. Default: output of `nproc` (`$(nproc)`).
 - `USE_RCLONE`: Use Rclone instead of rsync, mirroring from the HTTP server. Default: `0` (off). The script mirrors from the Fyra Labs rsync server by default.
+- `SYNC_SOURCES`: Whether to sync source repositories. Default: `1` (on).
