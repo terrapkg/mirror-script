@@ -8,7 +8,7 @@ This repository contains scripts to mirror Terra RPM repositories to a local dir
 - A good internet connection
 - Some disk space (100GB or more)
 - Some time
-- (Optional) A cron job to run this script regularly (preferrably every 5 minutes)
+- A cron job to run this script regularly (preferrably every 5 minutes)
 
 ## Usage
 
