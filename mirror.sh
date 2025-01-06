@@ -3,6 +3,14 @@ DEFAULT_MIRROR_URL="rsync://repos.fyralabs.com/repo/"
 DEFAULT_HTTP_MIRROR="https://repos.fyralabs.com"
 : ${USE_RCLONE=0}
 
+# Subdirectory to mirror, if any
+# If empty, mirrors the entire thing
+: ${MIRROR_SUBDIR:=""}
+
+if [ -n "$MIRROR_SUBDIR" ]; then
+    DEFAULT_MIRROR_URL="$DEFAULT_MIRROR_URL$MIRROR_SUBDIR/"
+fi
+
 # This script is for mirroring repos.fyralabs.com to a local directory.
 
 # Default mirror directory: directory of script / repo

@@ -37,3 +37,4 @@ The script can be configured using environment variables:
 - `MAX_THREADS`: The maximum number of threads to use. Default: output of `nproc` (`$(nproc)`).
 - `USE_RCLONE`: Use Rclone instead of rsync, mirroring from the HTTP server. Default: `0` (off). The script mirrors from the Fyra Labs rsync server by default.
 - `SYNC_SOURCES`: Whether to sync source repositories. Default: `1` (on).
+- `MIRROR_SUBDIR`: Optionally only mirror a specific subdirectory of the repository. Default: `''` (off).
